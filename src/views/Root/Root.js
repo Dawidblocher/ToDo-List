@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import Logo from 'components/atoms/Logo/Logo';
 import Button from 'components/atoms/Button/Button';
 import { theme } from 'theme/mainTheme';
+import Headign from 'components/atoms/Heading/Heading';
 
 const Root = () => (
   <div>
@@ -21,6 +22,7 @@ const Root = () => (
         <Button small red>
           Login
         </Button>
+        <Headign>Login</Headign>
       </div>
     </ThemeProvider>
   </div>
