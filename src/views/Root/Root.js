@@ -4,7 +4,9 @@ import { ThemeProvider } from 'styled-components';
 import Logo from 'components/atoms/Logo/Logo';
 import Button from 'components/atoms/Button/Button';
 import { theme } from 'theme/mainTheme';
-import Headign from 'components/atoms/Heading/Heading';
+// import Headign from 'components/atoms/Heading/Heading';
+import { Formik, Form } from 'formik';
+import InputField from 'components/atoms/InputField/InputField';
 
 const Root = () => (
   <div>
@@ -12,17 +14,27 @@ const Root = () => (
     <ThemeProvider theme={theme}>
       <div>
         <Logo />
-        <Button primary>Login</Button>
-        <Button>create an account</Button>
+        <Formik
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            email: '',
+          }}
+          onSubmit={async (values) => {
+            await new Promise((r) => setTimeout(r, 500));
+            console.log(values);
+          }}
+        >
+          <Form>
+            <InputField id="login" name="login" placeholder="Email or Username" />
 
-        <Button small uppercase>
-          Login
-        </Button>
+            <InputField id="password" type="password" name="lastName" placeholder="Password" />
 
-        <Button small red>
-          Login
-        </Button>
-        <Headign>Login</Headign>
+            <Button primary type="submit">
+              Login
+            </Button>
+          </Form>
+        </Formik>
       </div>
     </ThemeProvider>
   </div>
