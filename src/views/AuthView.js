@@ -6,6 +6,7 @@ import MainTemplate from 'templates/MainTemplate';
 import PropTypes from 'prop-types';
 import Heading from 'components/atoms/Heading/Heading';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const FormWrapper = styled.div`
   padding: 78px 0px;
@@ -17,6 +18,8 @@ const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 `;
 
 const StyledForm = styled(Form)`
@@ -92,7 +95,9 @@ const AuthView = ({ formType }) => (
       {formType !== 'register' ? (
         <>
           <StyledText>or</StyledText>
-          <Button>create an account</Button>
+          <Button as={Link} to="/register">
+            create an account
+          </Button>
         </>
       ) : null}
     </FormWrapper>
