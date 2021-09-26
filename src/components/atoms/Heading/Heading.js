@@ -5,6 +5,7 @@ const Heading = styled.h1`
   text-align: center;
   color: ${({ theme }) => theme.primary};
   width: 100%;
+  margin-bottom: ${({ marginBottom }) => marginBottom};
 `;
 
 export default Heading;

@@ -12,7 +12,7 @@ const InputField = styled(Field)`
   line-height: 28px;
   color: ${({ theme }) => theme.textGray};
   padding: 10px 18px;
-  width: 100%;
+  width: ${({ width }) => width};
   margin-bottom: 36px;
 `;
 
