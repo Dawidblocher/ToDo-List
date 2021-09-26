@@ -16,7 +16,7 @@ const normalProps = css`
   font-weight: ${({ primary }) => (primary ? 500 : 300)};
   font-size: ${({ primary }) => (primary ? '36px' : '48px')};
   color: ${({ primary, theme }) => (primary ? '#ffffff' : theme.primary)};
-
+  text-decoration: none;
   &:hover {
     background: ${({ primary }) => (primary ? '#e08600' : 'transparent')};
     text-decoration: ${({ primary }) => (primary ? 'none' : 'underline')};
