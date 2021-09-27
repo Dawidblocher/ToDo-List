@@ -10,7 +10,8 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/no-unresolved": 1,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "react/no-array-index-key": 0
   },
   "settings": {
     "import/resolver": {

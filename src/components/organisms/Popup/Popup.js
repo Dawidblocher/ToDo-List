@@ -70,16 +70,7 @@ const Popup = () => (
       <Formik
         initialValues={{
           name: 'My to do list name',
-          tasks: [
-            {
-              name: 'task 1',
-              isDone: false,
-            },
-            {
-              name: 'task 2',
-              isDone: true,
-            },
-          ],
+          tasks: [],
         }}
         onSubmit={async (values) => {
           await new Promise((r) => setTimeout(r, 500));
@@ -102,11 +93,16 @@ const Popup = () => (
                 name="tasks"
                 render={(arrayHelpers) => (
                   <div>
-                    {values.tasks.map((task, index) => (
-                      <div key={task.name}>
-                        <TaskItem name={`tasks.${index}.name`} />
-                      </div>
-                    ))}
+                    {values.tasks && values.tasks.length > 0
+                      ? values.tasks.map((task, index) => (
+                          <div key={index}>
+                            <TaskItem
+                              name={`tasks.${index}.name`}
+                              checkboxName={`tasks.${index}.isDone`}
+                            />
+                          </div>
+                        ))
+                      : null}
                     <AddTaskWrapper>
                       <Button
                         small
@@ -123,7 +119,7 @@ const Popup = () => (
                         type="button"
                         onClick={() =>
                           arrayHelpers.push({
-                            name: `Task Name ${values.tasks.length}`,
+                            name: ``,
                             isDone: false,
                           })
                         }

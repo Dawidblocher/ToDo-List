@@ -65,28 +65,25 @@ const CheckboxWrapper = styled.label`
   cursor: pointer;
 `;
 
-const TaskItem = ({ name }) => (
+const TaskItem = ({ name, checkboxName }) => (
   <TaskItemWrapper>
-    <CheckboxWrapper htmlFor={`checkbox-${name}`}>
-      <TaskCheckboxField
-        type="checkbox"
-        id={`checkbox-${name}`}
-        name={`checkbox-${name}`}
-        checked
-      />
+    <CheckboxWrapper htmlFor={checkboxName}>
+      <TaskCheckboxField type="checkbox" id={checkboxName} name={checkboxName} />
       <CustomCheckbox />
     </CheckboxWrapper>
 
-    <TaskInputField type="text" id={name} name={name} placeholder={name || 'Task Name'} />
+    <TaskInputField type="text" id={name} name={name} placeholder="Task Name" />
   </TaskItemWrapper>
 );
 
 TaskItem.propTypes = {
   name: PropTypes.string,
+  checkboxName: PropTypes.string,
 };
 
 TaskItem.defaultProps = {
   name: '',
+  checkboxName: '',
 };
 
 export default TaskItem;
