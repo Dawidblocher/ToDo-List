@@ -6,7 +6,7 @@ import TaskListView from './TaskListView';
 const Root = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/Login" component={() => <AuthView formType="login" />} />
+      <Route path="/login" component={() => <AuthView formType="login" />} />
       <Route path="/register" component={() => <AuthView formType="register" />} />
       <Route path="/" exact component={TaskListView} />
     </Switch>

@@ -13,6 +13,7 @@ const smallProps = css`
 const normalProps = css`
   min-width: 23.9rem;
   min-height: 7.8rem;
+  line-height: 76px;
   font-weight: ${({ primary }) => (primary ? 500 : 300)};
   font-size: ${({ primary }) => (primary ? '36px' : '48px')};
   color: ${({ primary, theme }) => (primary ? '#ffffff' : theme.primary)};

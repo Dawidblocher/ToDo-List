@@ -63,7 +63,7 @@ const ButtonDropdown = styled.button`
   }
 `;
 
-const SortSelect = ({ options }) => {
+const SortSelect = ({ options, handleSort }) => {
   const [sortValue, changeSort] = useState('Sort by');
   const [dropdownExpanded, setDropdownExpanded] = useState(false);
 
@@ -71,13 +71,14 @@ const SortSelect = ({ options }) => {
     setDropdownExpanded(!dropdownExpanded);
   };
 
-  const handleSort = (e) => {
+  const setSort = (e, type) => {
     setDropdownExpanded(false);
     changeSort(e.target.attributes.value.textContent);
+    handleSort(type);
   };
 
   const optionElement = options.map((option) => (
-    <ButtonDropdown key={option} type="button" value={option} onClick={(e) => handleSort(e)}>
+    <ButtonDropdown key={option} type="button" value={option} onClick={(e) => setSort(e, option)}>
       {option}
     </ButtonDropdown>
   ));
@@ -94,6 +95,7 @@ const SortSelect = ({ options }) => {
 
 SortSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleSort: PropTypes.func,
 };
 
 export default SortSelect;

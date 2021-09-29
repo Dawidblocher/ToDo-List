@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import InputField from 'components/atoms/InputField/InputField';
 import Button from 'components/atoms/Button/Button';
 import MainTemplate from 'templates/MainTemplate';
@@ -7,6 +7,10 @@ import PropTypes from 'prop-types';
 import Heading from 'components/atoms/Heading/Heading';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { authenticate, register } from 'actions';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import * as Yup from 'yup';
 
 const FormWrapper = styled.div`
   padding: 78px 0px;
@@ -24,7 +28,8 @@ const FormWrapper = styled.div`
 `;
 
 const StyledForm = styled(Form)`
-  padding: 0px 146px;
+  max-width: 600px;
+  width: 100%;
 `;
 
 const SyledFooterForm = styled.div`
@@ -52,91 +57,148 @@ const ArrowButton = styled(Button)`
   align-items: center;
 `;
 
-const AuthView = ({ formType }) => (
-  <MainTemplate>
-    <FormWrapper>
-      {formType === 'register' ? (
-        <ArrowButton as={Link} to="/">
-          <svg
-            width="69"
-            height="24"
-            viewBox="0 0 69 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0.939339 10.9393C0.353554 11.5251 0.353554 12.4749 0.939339 13.0607L10.4853 22.6066C11.0711 23.1924 12.0208 23.1924 12.6066 22.6066C13.1924 22.0208 13.1924 21.0711 12.6066 20.4853L4.12132 12L12.6066 3.51472C13.1924 2.92894 13.1924 1.97919 12.6066 1.3934C12.0208 0.807616 11.0711 0.807617 10.4853 1.3934L0.939339 10.9393ZM69 10.5L2 10.5L2 13.5L69 13.5L69 10.5Z"
-              fill="white"
-            />
-          </svg>
-        </ArrowButton>
-      ) : null}
+const ErrorMessageWrapper = styled.div`
+  color: ${({ theme }) => theme.primary};
+  font-size: 14px;
+  font-weight: 200;
+  margin-bottom: 5px;
+`;
 
-      {formType === 'register' ? (
-        <Heading marginBottom="100px">Create an new account</Heading>
-      ) : (
-        <Heading marginBottom="187px">Login</Heading>
-      )}
+const AuthView = ({ formType, authenticate, register, user }) => {
+  if (user) {
+    return <Redirect to="/" />;
+  }
+  const validateRegister = Yup.object({
+    login: Yup.string().max(30, 'Max 30 chararacters').required('Login is required'),
+    email: Yup.string().email('Emial is invalid').required('Email is required'),
+    password: Yup.string().min(6, 'Min 6 chararacters').required('Passsowrd is required'),
+    passwordRepeat: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Password must match')
+      .required('Confirm passsowrd is required'),
+  });
+  const validateLogin = Yup.object({
+    login: Yup.string().max(30, 'Max 30 chararacters').required('Login is required'),
+    password: Yup.string().min(6, 'Min 6 chararacters').required('Passsowrd is required'),
+  });
+  return (
+    <MainTemplate>
+      <FormWrapper>
+        {formType === 'register' ? (
+          <ArrowButton as={Link} to="/login">
+            <svg
+              width="69"
+              height="24"
+              viewBox="0 0 69 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0.939339 10.9393C0.353554 11.5251 0.353554 12.4749 0.939339 13.0607L10.4853 22.6066C11.0711 23.1924 12.0208 23.1924 12.6066 22.6066C13.1924 22.0208 13.1924 21.0711 12.6066 20.4853L4.12132 12L12.6066 3.51472C13.1924 2.92894 13.1924 1.97919 12.6066 1.3934C12.0208 0.807616 11.0711 0.807617 10.4853 1.3934L0.939339 10.9393ZM69 10.5L2 10.5L2 13.5L69 13.5L69 10.5Z"
+                fill="white"
+              />
+            </svg>
+          </ArrowButton>
+        ) : null}
 
-      <Formik
-        initialValues={{
-          firstName: '',
-          lastName: '',
-          email: '',
-        }}
-        onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 500));
-          console.log(values);
-        }}
-      >
-        <StyledForm>
-          <InputField id="login" name="login" placeholder="Email or Username" width="100%" />
+        {formType === 'register' ? (
+          <Heading marginBottom="100px">Create an new account</Heading>
+        ) : (
+          <Heading marginBottom="187px">Login</Heading>
+        )}
 
-          {formType === 'register' ? (
-            <InputField id="email" type="email" name="email" placeholder="Email" width="100%" />
-          ) : null}
+        <Formik
+          initialValues={{
+            login: '',
+            email: '',
+            password: '',
+            passwordRepeat: '',
+          }}
+          validationSchema={formType === 'register' ? validateRegister : validateLogin}
+          onSubmit={(values) => {
+            console.log(values);
+            if (formType === 'register') {
+              register(values.login, values.email, values.password);
+            } else {
+              authenticate(values.login, values.password);
+            }
+          }}
+        >
+          <StyledForm>
+            <ErrorMessageWrapper>
+              <ErrorMessage name="login" />
+            </ErrorMessageWrapper>
+            <InputField id="login" name="login" placeholder="Email or Username" width="100%" />
 
-          <InputField
-            id="password"
-            type="password"
-            name="lastName"
-            placeholder="Password"
-            width="100%"
-          />
+            {formType === 'register' ? (
+              <div>
+                <ErrorMessageWrapper>
+                  <ErrorMessage name="email" />
+                </ErrorMessageWrapper>
+                <InputField id="email" type="email" name="email" placeholder="Email" width="100%" />
+              </div>
+            ) : null}
 
-          {formType === 'register' ? (
+            <ErrorMessageWrapper>
+              <ErrorMessage name="password" />
+            </ErrorMessageWrapper>
             <InputField
-              id="password-repeat"
-              type="password-repeat"
-              name="password-repeat"
-              placeholder="Repeat password"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
               width="100%"
             />
-          ) : null}
-          <SyledFooterForm formType={formType}>
-            <Button primary type="submit">
-              {formType === 'register' ? 'Create' : 'Login'}
-            </Button>
-          </SyledFooterForm>
-        </StyledForm>
-      </Formik>
-      {formType !== 'register' ? (
-        <>
-          <StyledText>or</StyledText>
-          <Button as={Link} to="/register">
-            create an account
-          </Button>
-        </>
-      ) : null}
-    </FormWrapper>
-  </MainTemplate>
-);
 
+            {formType === 'register' ? (
+              <div>
+                <ErrorMessageWrapper>
+                  <ErrorMessage name="passwordRepeat" />
+                </ErrorMessageWrapper>
+                <InputField
+                  id="passwordRepeat"
+                  type="passwordRepeat"
+                  name="passwordRepeat"
+                  placeholder="Repeat password"
+                  width="100%"
+                />
+              </div>
+            ) : null}
+            <SyledFooterForm formType={formType}>
+              <Button primary type="submit">
+                {formType === 'register' ? 'Create' : 'Login'}
+              </Button>
+            </SyledFooterForm>
+          </StyledForm>
+        </Formik>
+        {formType !== 'register' ? (
+          <>
+            <StyledText>or</StyledText>
+            <Button as={Link} to="/register">
+              create an account
+            </Button>
+          </>
+        ) : null}
+      </FormWrapper>
+    </MainTemplate>
+  );
+};
 AuthView.propTypes = {
   formType: PropTypes.string,
+  authenticate: PropTypes.func,
+  register: PropTypes.func,
+  user: PropTypes.object,
 };
 
 AuthView.defaultProps = {
   formType: 'Login',
 };
-export default AuthView;
+
+const mapDispatchToProps = (dispatch) => ({
+  authenticate: (login, passowrd) => dispatch(authenticate(login, passowrd)),
+  register: (login, email, passowrd, passwordRepeat) =>
+    dispatch(register(login, email, passowrd, passwordRepeat)),
+});
+
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthView);

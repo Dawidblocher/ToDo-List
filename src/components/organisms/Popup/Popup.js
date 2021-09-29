@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import { Formik, Form, FieldArray } from 'formik';
+import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
 import InputField from 'components/atoms/InputField/InputField';
 import Button from 'components/atoms/Button/Button';
 import TaskItem from 'components/molecules/TaskItem/TaskItem';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { createToDoList, editToDoList } from 'actions';
+import * as Yup from 'yup';
 
 const PopupHeader = styled.header`
   border-bottom: 4px solid #ff9900;
@@ -22,7 +26,7 @@ const PopupWrapper = styled.div`
   top: 0;
   left: 0;
   z-index: 97;
-  display: flex;
+  display: ${({ popupStatus }) => (popupStatus ? 'flex' : 'none')};
   justify-content: center;
 
   &::after {
@@ -64,43 +68,88 @@ const AddTaskWrapper = styled.div`
   }
 `;
 
-const Popup = () => (
-  <PopupWrapper>
+const TaskItemWrapper = styled.div`
+  position: relative;
+
+  &:hover button {
+    opacity: 1;
+  }
+`;
+
+const RemoveItem = styled.button`
+  position: absolute;
+  border: 0;
+  top: 0;
+  right: 0;
+  background: transparent;
+  font-size: 20px;
+  color: white;
+  padding: 11px;
+  opacity: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+  }
+`;
+
+const validate = Yup.object({
+  name: Yup.string().required('Login is required'),
+});
+const validateEdit = Yup.object({
+  name: Yup.string(),
+});
+const ErrorMessageWrapper = styled.div`
+  color: ${({ theme }) => theme.primary};
+  font-size: 14px;
+  font-weight: 200;
+  margin-bottom: 5px;
+`;
+const Popup = ({ popupStatus, handlePopup, createToDoList, editList, editToDoList }) => (
+  <PopupWrapper popupStatus={popupStatus}>
     <PopupContent>
       <Formik
         initialValues={{
-          name: 'My to do list name',
-          tasks: [],
+          name: editList.name,
+          task: editList.task,
         }}
-        onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 500));
-          console.log(values);
+        validationSchema={editList.id ? validateEdit : validate}
+        onSubmit={(values) => {
+          if (editList.id) {
+            editToDoList(values, editList.id);
+          } else {
+            createToDoList(values);
+          }
+          handlePopup();
         }}
       >
         {({ values }) => (
           <Form>
             <PopupHeader>
-              <InputField
-                id="login"
-                name="login"
-                placeholder="List name"
-                width="100%"
-                value={values.name}
-              />
+              <ErrorMessageWrapper>
+                <ErrorMessage name="name" />
+              </ErrorMessageWrapper>
+              <InputField type="text" id="name" name="name" placeholder="List name" width="100%" />
             </PopupHeader>
             <PopupBody>
               <FieldArray
-                name="tasks"
+                name="task"
                 render={(arrayHelpers) => (
                   <div>
-                    {values.tasks && values.tasks.length > 0
-                      ? values.tasks.map((task, index) => (
-                          <div key={index}>
+                    {values.task && values.task.length > 0
+                      ? values.task.map((task, index) => (
+                          <TaskItemWrapper key={index}>
                             <TaskItem
-                              name={`tasks.${index}.name`}
-                              checkboxName={`tasks.${index}.isDone`}
+                              name={`task.${index}.name`}
+                              checkboxName={`task.${index}.isDone`}
                             />
-                          </div>
+                            <RemoveItem
+                              type="button"
+                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                            >
+                              X
+                            </RemoveItem>
+                          </TaskItemWrapper>
                         ))
                       : null}
                     <AddTaskWrapper>
@@ -109,7 +158,7 @@ const Popup = () => (
                         red
                         uppercase
                         type="button"
-                        onClick={() => arrayHelpers.remove(values.tasks.length - 1)}
+                        onClick={() => arrayHelpers.remove(values.task.length - 1)}
                       >
                         Cancel
                       </Button>
@@ -133,7 +182,9 @@ const Popup = () => (
             </PopupBody>
 
             <SyledFooterForm>
-              <Button type="submit">Cancel</Button>
+              <Button type="button" onClick={() => handlePopup()}>
+                Cancel
+              </Button>
               <Button primary type="submit">
                 SAVE
               </Button>
@@ -144,4 +195,20 @@ const Popup = () => (
     </PopupContent>
   </PopupWrapper>
 );
-export default Popup;
+
+Popup.propTypes = {
+  popupStatus: PropTypes.bool,
+  handlePopup: PropTypes.func,
+  createToDoList: PropTypes.func,
+  editList: PropTypes.object,
+  editToDoList: PropTypes.func,
+};
+
+const mapStateToProps = ({ task }) => ({ task });
+
+const mapDispatchToProps = (dispatch) => ({
+  createToDoList: (list) => dispatch(createToDoList(list)),
+  editToDoList: (list, id) => dispatch(editToDoList(list, id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);

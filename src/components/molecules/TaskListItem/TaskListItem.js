@@ -1,20 +1,18 @@
 import styled from 'styled-components';
+import PropType from 'prop-types';
+import { deleteToDoList } from 'actions';
+import { connect } from 'react-redux';
 
-const ListItemWrapper = styled.div`
+const ListItemContent = styled.div`
   padding: 36px;
   background: ${({ theme }) => theme.gray};
   border-radius: 8px;
   display: flex;
   width: ${({ minwidth }) => minwidth};
   justify-content: space-between;
-  margin-bottom: 36px;
-  transition: box-shadow 0.3s, transform 0.2s;
-  cursor: pointer;
 
-  &:hover {
-    box-shadow: 2px 2px 7px 0px #000;
-    transform: scale(1.01);
-  }
+  cursor: pointer;
+  position: relative;
 `;
 
 const Text = styled.p`
@@ -34,12 +32,73 @@ const ListItemName = styled.p`
   margin: 0;
 `;
 
-const TaskListItem = () => (
-  <ListItemWrapper>
-    <ListItemName bold>ToDo List Name</ListItemName>
-    <Text italic>Created at: 18-03-2021</Text>
-    <Text>Completed: 15 Uncompleted: 10 All: 25</Text>
-  </ListItemWrapper>
-);
+const RemoveListButton = styled.button`
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: ${({ theme }) => theme.primary};
+  color: #fff;
+  border: 0;
+  opacity: 0;
+  border-radius: 0 8px 0 8px;
+  cursor: pointer;
+  padding: 6px 10px;
 
-export default TaskListItem;
+  &:hover {
+    background: ${({ theme }) => theme.red};
+  }
+`;
+
+const ListItemWrapper = styled.div`
+  position: relative;
+  margin-bottom: 36px;
+  transition: box-shadow 0.3s, transform 0.2s;
+  &:hover {
+    box-shadow: 2px 2px 7px 0px #000;
+    transform: scale(1.01);
+  }
+  &:hover button {
+    opacity: 1;
+  }
+`;
+
+const TaskListItem = ({ name, publishedAt, task, handlePopup, deleteToDoList, id }) => {
+  const handleRemoveButton = () => {
+    deleteToDoList(id);
+  };
+  return (
+    <ListItemWrapper>
+      <ListItemContent onClick={() => handlePopup()}>
+        <ListItemName bold>{name}</ListItemName>
+        <Text italic>Created at: {publishedAt.substring(0, 10)}</Text>
+        <Text>
+          Completed: {task.filter((item) => item.isDone).length} Uncompleted:{' '}
+          {task.filter((item) => !item.isDone).length} All: {task.length}
+        </Text>
+      </ListItemContent>
+      <RemoveListButton type="button" onClick={() => handleRemoveButton()}>
+        X
+      </RemoveListButton>
+    </ListItemWrapper>
+  );
+};
+TaskListItem.propTypes = {
+  name: PropType.string,
+  publishedAt: PropType.string,
+  task: PropType.array,
+  id: PropType.number,
+  handlePopup: PropType.func,
+  deleteToDoList: PropType.func,
+};
+
+// TaskListItem.propTypes = {
+//   name: PropType.string,
+//   published_at: PropType.string,
+//   task: PropType.array,
+// };
+
+const mapDispatchTopProps = (dispatch) => ({
+  deleteToDoList: (id) => dispatch(deleteToDoList(id)),
+});
+
+export default connect(null, mapDispatchTopProps)(TaskListItem);
