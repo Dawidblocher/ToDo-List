@@ -164,7 +164,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
               </div>
             ) : null}
             <SyledFooterForm formType={formType}>
-              <Button primary type="submit">
+              <Button as={Link} to="/" type="submit">
                 {formType === 'register' ? 'Create' : 'Login'}
               </Button>
             </SyledFooterForm>
