@@ -4,7 +4,7 @@ import AuthView from './AuthView';
 import TaskListView from './TaskListView';
 
 const Root = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Switch>
       <Route path="/login" component={() => <AuthView formType="login" />} />
       <Route path="/register" component={() => <AuthView formType="register" />} />
