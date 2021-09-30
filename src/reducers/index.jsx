@@ -13,17 +13,15 @@ const initialState = { user };
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case TODOLIST_SUCCESS:
-      const { data } = action.response;
-
       return {
         ...state,
-        todoList: data,
+        todoList: action.payload.data,
       };
 
     case CREATE_TODOLIST_SUCCESS:
       return {
         ...state,
-        todoList: [...state.todoList, action.response.data],
+        todoList: [...state.todoList, action.payload.data],
       };
 
     case EDIT_TODOLIST_SUCCESS:
@@ -31,17 +29,17 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         todoList: [
           action.response.data,
-          ...state.todoList.filter((item) => item.id !== action.response.data.id),
+          ...state.todoList.filter((item) => item.id !== action.payload.data.id),
         ],
       };
     case DELETE_TODOLIST_SUCCESS:
       return {
         ...state,
-        todoList: [...state.todoList.filter((item) => item.id !== action.response.data.id)],
+        todoList: [...state.todoList.filter((item) => item.id !== action.payload.data.id)],
       };
 
     case AUTHENTICATE_SUCCESS:
-      const { user, jwt } = action.response.data;
+      const { user, jwt } = action.payload.data;
 
       return {
         ...state,

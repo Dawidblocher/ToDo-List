@@ -1,6 +1,6 @@
 import MainTemplate from 'templates/MainTemplate';
 import SearchInput from 'components/atoms/SearchInput/SearchInput';
-import SortSelect from 'components/atoms/SortSelect/SortSelect';
+import SortSelect from 'components/molecules/SortSelect/SortSelect';
 import styled from 'styled-components';
 import TaskListItem from 'components/molecules/TaskListItem/TaskListItem';
 import Popup from 'components/organisms/Popup/Popup';
@@ -99,7 +99,6 @@ const ButtonAddNewList = styled.button`
 const TaskListView = ({ user, getToDoList, todoList = [] }) => {
   const [popupStatus, setPopupStatus] = useState(false);
   const [editList, setEditList] = useState({ name: '', task: [] });
-
   const [sort, setSort] = useState('default');
   const [searchValue, setSearchValue] = useState('');
 

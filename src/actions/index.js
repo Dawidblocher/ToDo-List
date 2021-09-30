@@ -35,10 +35,9 @@ export const authenticate = (login, pass) => (dispatch) => {
     .then((response) => {
       sessionStorage.setItem('user', JSON.stringify(response.data.user));
       sessionStorage.setItem('jwt', JSON.stringify(response.data.jwt));
-      dispatch({ type: AUTHENTICATE_SUCCESS, response });
+      dispatch({ type: AUTHENTICATE_SUCCESS, payload: response });
     })
     .catch((error) => {
-      console.log(error);
       dispatch({ type: AUTHENTICATE_FAILURE, error });
     });
 };
@@ -52,11 +51,11 @@ export const register = (login, youremail, pass) => (dispatch) => {
       email: youremail,
       password: pass,
     })
-    .then((payload) => {
-      dispatch({ type: REGISTER_SUCCESS, payload });
+    .then((response) => {
+      dispatch({ type: REGISTER_SUCCESS, payload: response });
     })
     .catch((error) => {
-      dispatch({ type: REGISTER_FAILURE, error });
+      dispatch({ type: REGISTER_FAILURE, payload: error });
     });
 };
 
@@ -69,10 +68,10 @@ export const getToDoList = () => (dispatch) => {
       },
     })
     .then((response) => {
-      dispatch({ type: TODOLIST_SUCCESS, response });
+      dispatch({ type: TODOLIST_SUCCESS, payload: response });
     })
     .catch((error) => {
-      dispatch({ type: TODOLIST_FAILURE, error });
+      dispatch({ type: TODOLIST_FAILURE, payload: error });
     });
 };
 
@@ -92,10 +91,10 @@ export const createToDoList = (todolist) => (dispatch) => {
       },
     )
     .then((response) => {
-      dispatch({ type: CREATE_TODOLIST_SUCCESS, response });
+      dispatch({ type: CREATE_TODOLIST_SUCCESS, payload: response });
     })
     .catch((err) => {
-      dispatch({ type: CREATE_TODOLIST_FAILURE, err });
+      dispatch({ type: CREATE_TODOLIST_FAILURE, payload: err });
     });
 };
 
@@ -115,10 +114,10 @@ export const editToDoList = (todolist, id) => (dispatch) => {
       },
     )
     .then((response) => {
-      dispatch({ type: EDIT_TODOLIST_SUCCESS, response });
+      dispatch({ type: EDIT_TODOLIST_SUCCESS, payload: response });
     })
     .catch((err) => {
-      dispatch({ type: EDIT_TODOLIST_FAILURE, err });
+      dispatch({ type: EDIT_TODOLIST_FAILURE, payload: err });
     });
 };
 
@@ -136,9 +135,9 @@ export const deleteToDoList = (id) => (dispatch) => {
       },
     )
     .then((response) => {
-      dispatch({ type: DELETE_TODOLIST_SUCCESS, response });
+      dispatch({ type: DELETE_TODOLIST_SUCCESS, payload: response });
     })
     .catch((err) => {
-      dispatch({ type: DELETE_TODOLIST_FAILURE, err });
+      dispatch({ type: DELETE_TODOLIST_FAILURE, payload: err });
     });
 };

@@ -94,7 +94,7 @@ const RemoveItem = styled.button`
 `;
 
 const validate = Yup.object({
-  name: Yup.string().required('Login is required'),
+  name: Yup.string().required('Name is required'),
 });
 const validateEdit = Yup.object({
   name: Yup.string(),

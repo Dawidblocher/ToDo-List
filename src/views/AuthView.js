@@ -6,7 +6,7 @@ import MainTemplate from 'templates/MainTemplate';
 import PropTypes from 'prop-types';
 import Heading from 'components/atoms/Heading/Heading';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { authenticate, register } from 'actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -65,6 +65,7 @@ const ErrorMessageWrapper = styled.div`
 `;
 
 const AuthView = ({ formType, authenticate, register, user }) => {
+  const history = useHistory();
   if (user) {
     return <Redirect to="/" />;
   }
@@ -117,6 +118,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
           onSubmit={(values) => {
             if (formType === 'register') {
               register(values.login, values.email, values.password);
+              history.push('/login');
             } else {
               authenticate(values.login, values.password);
             }
@@ -146,6 +148,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
               name="password"
               placeholder="Password"
               width="100%"
+              autoComplete="on"
             />
 
             {formType === 'register' ? (
@@ -159,11 +162,12 @@ const AuthView = ({ formType, authenticate, register, user }) => {
                   name="passwordRepeat"
                   placeholder="Repeat password"
                   width="100%"
+                  autoComplete="on"
                 />
               </div>
             ) : null}
             <SyledFooterForm formType={formType}>
-              <Button to="/" type="submit">
+              <Button primary type="submit">
                 {formType === 'register' ? 'Create' : 'Login'}
               </Button>
             </SyledFooterForm>
