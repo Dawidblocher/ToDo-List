@@ -115,11 +115,9 @@ const AuthView = ({ formType, authenticate, register, user }) => {
           }}
           validationSchema={formType === 'register' ? validateRegister : validateLogin}
           onSubmit={(values) => {
-            console.log(values);
             if (formType === 'register') {
               register(values.login, values.email, values.password);
             } else {
-              console.log(values);
               authenticate(values.login, values.password);
             }
           }}

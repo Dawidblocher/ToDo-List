@@ -38,6 +38,7 @@ export const authenticate = (login, pass) => (dispatch) => {
       dispatch({ type: AUTHENTICATE_SUCCESS, response });
     })
     .catch((error) => {
+      console.log(error);
       dispatch({ type: AUTHENTICATE_FAILURE, error });
     });
 };
