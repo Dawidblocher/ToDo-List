@@ -13,6 +13,9 @@ const ListItemContent = styled.div`
 
   cursor: pointer;
   position: relative;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const Text = styled.p`
@@ -21,6 +24,11 @@ const Text = styled.p`
   font-style: ${({ italic }) => (italic ? 'italic' : 'normal')};
   color: #fff;
   margin: 0;
+  @media (max-width: 768px) {
+    & span {
+      display: block;
+    }
+  }
 `;
 
 const ListItemName = styled.p`
@@ -72,8 +80,9 @@ const TaskListItem = ({ name, publishedAt, task, handlePopup, deleteToDoList, id
         <ListItemName bold>{name}</ListItemName>
         <Text italic>Created at: {publishedAt.substring(0, 10)}</Text>
         <Text>
-          Completed: {task.filter((item) => item.isDone).length} Uncompleted:{' '}
-          {task.filter((item) => !item.isDone).length} All: {task.length}
+          <span>Completed: {task.filter((item) => item.isDone).length}</span>
+          <span>Uncompleted: {task.filter((item) => !item.isDone).length}</span>
+          <span>All: {task.length}</span>
         </Text>
       </ListItemContent>
       <RemoveListButton type="button" onClick={() => handleRemoveButton()}>

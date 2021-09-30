@@ -17,6 +17,9 @@ const SyledFooterForm = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const PopupWrapper = styled.div`
@@ -58,6 +61,9 @@ const PopupContent = styled.div`
 const PopupBody = styled.div`
   height: calc(100% - 280px);
   margin-bottom: 80px;
+  @media (max-width: 768px) {
+    height: calc(100% - 350px);
+  }
 `;
 
 const AddTaskWrapper = styled.div`
@@ -65,6 +71,14 @@ const AddTaskWrapper = styled.div`
   justify-content: flex-end;
   & button {
     margin-left: 84px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    & button {
+      margin-left: 0;
+      margin-bottom: 15px;
+    }
   }
 `;
 

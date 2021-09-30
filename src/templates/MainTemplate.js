@@ -21,6 +21,8 @@ const handleLogout = () => {
 };
 
 const StyledButton = styled(Button)`
+  min-width: inherit;
+  margin-left: 40px;
   & .arrow {
     transition: transform 0.3s;
   }

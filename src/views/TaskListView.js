@@ -15,6 +15,9 @@ const TaskListHeader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 40px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const TaskListWrapper = styled.div`

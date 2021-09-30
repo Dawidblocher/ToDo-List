@@ -25,6 +25,12 @@ const FormWrapper = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   position: relative;
+
+  @media (max-width: 768px) {
+    box-shadow: none;
+    background: transparent;
+    margin-top 0;
+  }
 `;
 
 const StyledForm = styled(Form)`

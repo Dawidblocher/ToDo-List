@@ -28,7 +28,7 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         todoList: [
-          action.response.data,
+          action.payload.data,
           ...state.todoList.filter((item) => item.id !== action.payload.data.id),
         ],
       };
