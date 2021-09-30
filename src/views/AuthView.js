@@ -29,7 +29,7 @@ const FormWrapper = styled.div`
   @media (max-width: 768px) {
     box-shadow: none;
     background: transparent;
-    margin-top 0;
+    margin-top: 0;
   }
 `;
 

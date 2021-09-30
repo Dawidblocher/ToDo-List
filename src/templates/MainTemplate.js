@@ -36,7 +36,9 @@ const MainTemplate = ({ children, user }) => (
     <GlobalStyle />
     <ThemeProvider theme={theme}>
       <Header>
-        <Logo />
+        <Link to="/">
+          <Logo />
+        </Link>
         {user ? (
           <StyledButton as={Link} to="/login" onClick={() => handleLogout()}>
             <svg
