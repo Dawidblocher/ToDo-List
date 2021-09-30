@@ -119,6 +119,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
             if (formType === 'register') {
               register(values.login, values.email, values.password);
             } else {
+              console.log(values);
               authenticate(values.login, values.password);
             }
           }}
@@ -156,7 +157,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
                 </ErrorMessageWrapper>
                 <InputField
                   id="passwordRepeat"
-                  type="passwordRepeat"
+                  type="password"
                   name="passwordRepeat"
                   placeholder="Repeat password"
                   width="100%"
@@ -164,7 +165,7 @@ const AuthView = ({ formType, authenticate, register, user }) => {
               </div>
             ) : null}
             <SyledFooterForm formType={formType}>
-              <Button as={Link} to="/" type="submit">
+              <Button to="/" type="submit">
                 {formType === 'register' ? 'Create' : 'Login'}
               </Button>
             </SyledFooterForm>
